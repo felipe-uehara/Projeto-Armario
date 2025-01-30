@@ -4,6 +4,8 @@ Integrantes: Juniper, Yasmin e Felipe
 
 Fontes utilizadas: https://www.youtube.com/watch?v=hXP_kQ_EbkA
 
+Não funciona esse
+
 */
 
 #include <ESP32Servo.h>
