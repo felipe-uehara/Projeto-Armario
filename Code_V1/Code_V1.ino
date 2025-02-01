@@ -42,7 +42,7 @@ const int LED_strip = 33;
 const int mic = 25;
 
 //Locomotion Pins
-const int Left_Forward = 4, Left_Backward = 18, /*Left_Enable = 12*/, Right_Forward = 21, Right_Backward = 22, /*Right_Enable = 23*/;
+const int Left_Forward = 4, Left_Backward = 18, /*Left_Enable = 12*/ Right_Forward = 21, Right_Backward = 22 /*Right_Enable = 23*/;
 
 
 
@@ -188,9 +188,11 @@ void processGamepad(ControllerPtr ctl) {
   //== PS4 Dpad UP button = 0x01 ==//
   if (ctl->buttons() == 0x01) {
     // code for when dpad up button is pushed
+    Serial.println("oiii");
   }
   if (ctl->buttons() != 0x01) {
     // code for when dpad up button is released
+    
   }
 
   //==PS4 Dpad DOWN button = 0x02==//
@@ -327,10 +329,10 @@ void setup() {
 
   pinMode(Left_Forward, OUTPUT);
   pinMode(Left_Backward, OUTPUT);
-  pinMode(Left_Enable, OUTPUT);
+  //pinMode(Left_Enable, OUTPUT);
   pinMode(Right_Forward, OUTPUT);
   pinMode(Right_Backward, OUTPUT);
-  pinMode(Right_Enable, OUTPUT);
+ // pinMode(Right_Enable, OUTPUT);
 
   //Initialize with all components in zero
   digitalWrite(LED_state, LOW);
@@ -340,10 +342,10 @@ void setup() {
   analogWrite(D3, 0);
   analogWrite(Left_Forward, 0);
   analogWrite(Left_Backward, 0);
-  analogWrite(Left_Enable, 0);
+  //analogWrite(Left_Enable, 0);
   analogWrite(Right_Forward, 0);
   analogWrite(Right_Backward, 0);
-  analogWrite(Right_Enable, 0);
+  //analogWrite(Right_Enable, 0);
 
   Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
   const uint8_t* addr = BP32.localBdAddress();

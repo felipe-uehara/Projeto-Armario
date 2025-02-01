@@ -119,8 +119,9 @@ void processGamepad(ControllerPtr ctl) {
   }
 
   //== PS4 Dpad UP button = 0x01 ==//
-  if (ctl->buttons() == 0x01) {
+  if (ctl->dpad() == 0x01) {
     // code for when dpad up button is pushed
+    Serial.println("oiii");
   }
   if (ctl->buttons() != 0x01) {
     // code for when dpad up button is released

@@ -30,7 +30,7 @@ const int Left_Forward = 4, Left_Backward = 18,
           Right_Forward = 21, Right_Backward = 22;
 
 //Initial PWM Duty-Cycle for the drawers
-const int speed = 63; //63 = 25%
+const int speed = 255; //63 = 25%
 
 
 
@@ -117,21 +117,30 @@ void processGamepad(ControllerPtr ctl) {
     // code for when "X" button is pushed
     Serial.println("Gaveta 3 abrindo....");
     analogWrite(D3_Backward, 0);
-    analogWrite(D3_Forward, speed);
+    analogWrite(D3_Forward, 0);
 
-    //Front Sensor of D1: E31 (1,0,1)
+    //Front Sensor of D3: E32 (1,0,1)
     digitalWrite(S2, HIGH);
     digitalWrite(S1, LOW);
     digitalWrite(S0, HIGH);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 3 JÁ está aberta!");
 
-    if (digitalRead(PB)){
-      analogWrite(D3_Forward, 0);
-      Serial.println("Gaveta 3 aberta!");
-    }
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D3_Forward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D3_Forward, 0);
+          Serial.println("Gaveta 3 aberta!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D3_Forward, 0);
+          Serial.println("Gaveta 3 aberta!");
+        } 
+    } 
   }
-
 
   //LED strip - turn ON//
   //== PS4 Square button = 0x0004 ==//
@@ -148,22 +157,30 @@ void processGamepad(ControllerPtr ctl) {
     // code for when TRIANGLE button is pushed
     Serial.println("Gaveta 1 abrindo....");
     analogWrite(D1_Backward, 0);
-    analogWrite(D1_Forward, speed);
+    analogWrite(D1_Forward, 0);
 
     //Front Sensor of D1: E12 (0,0,1)
     digitalWrite(S2, LOW);
     digitalWrite(S1, LOW);
     digitalWrite(S0, HIGH);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 1 JÁ está aberta!");
 
-    if (digitalRead(PB)){
-      analogWrite(D1_Forward, 0);
-      Serial.println("Gaveta 1 aberta!");
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D1_Forward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D1_Forward, 0);
+          Serial.println("Gaveta 1 aberta!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D1_Forward, 0);
+          Serial.println("Gaveta 1 aberta!");
+      } 
     }
-    
-  } 
-
+  }
 
   //Drawer 2 - Opening//
   //== PS4 Circle button = 0x0002 ==//
@@ -171,109 +188,166 @@ void processGamepad(ControllerPtr ctl) {
     // code for when CIRCLE button is pushed
     Serial.println("Gaveta 2 abrindo....");
     analogWrite(D2_Backward, 0);
-    analogWrite(D2_Forward, speed);
+    analogWrite(D2_Forward, 0);
 
-    //Front Sensor of D1: E12 (0,1,1)
+    //Front Sensor of D2: E22 (0,1,1)
     digitalWrite(S2, LOW);
     digitalWrite(S1, HIGH);
     digitalWrite(S0, HIGH);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 2 JÁ está aberta!");
 
-    if (digitalRead(PB)){
-      analogWrite(D2_Forward, 0);
-      Serial.println("Gaveta 2 aberta!");
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D2_Forward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D2_Forward, 0);
+          Serial.println("Gaveta 2 aberta!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D2_Forward, 0);
+          Serial.println("Gaveta 2 aberta!");
+      }
     }
   }
 
 
   //Drawer 1 - Closing//
   //== PS4 Dpad UP button = 0x01 ==//
-  if (ctl->buttons() == 0x01) {
+  if (ctl->dpad() == 0x01) {
     // code for when dpad up button is pushed
     Serial.println("Gaveta 1 fechando....");
+    analogWrite(D1_Backward, 0);
     analogWrite(D1_Forward, 0);
-    analogWrite(D1_Backward, speed);
 
-    //Front Sensor of D1: E11 (0,0,0)
+    //Back Sensor of D2: E11 (0,0,0)
     digitalWrite(S2, LOW);
     digitalWrite(S1, LOW);
     digitalWrite(S0, LOW);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 1 JÁ está fechada!");
 
-    if (digitalRead(PB)){
-      analogWrite(D1_Backward, 0);
-      Serial.println("Gaveta 1 fechada!");
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D1_Backward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D1_Backward, 0);
+          Serial.println("Gaveta 1 fechada!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D1_Backward, 0);
+          Serial.println("Gaveta 1 fechada!");
+      }
     }
   }
 
 
   //Drawer 3 - Closing//
   //==PS4 Dpad DOWN button = 0x02==//
-  if (ctl->buttons() == 0x02) {
+  if (ctl->dpad() == 0x02) {
     // code for when dpad down button is pushed
     Serial.println("Gaveta 3 fechando....");
+    analogWrite(D3_Backward, 0);
     analogWrite(D3_Forward, 0);
-    analogWrite(D3_Backward, speed);
 
-    //Front Sensor of D1: E31 (1,0,0)
+    //Back Sensor of D3: E31 (1,0,0)
     digitalWrite(S2, HIGH);
     digitalWrite(S1, LOW);
     digitalWrite(S0, LOW);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 3 JÁ está fechada!");
 
-    if (digitalRead(PB)){
-      analogWrite(D3_Backward, 0);
-      Serial.println("Gaveta 3 fechada!");
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D3_Backward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D3_Backward, 0);
+          Serial.println("Gaveta 3 fechada!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D3_Backward, 0);
+          Serial.println("Gaveta 3 fechada!");
+      }
     }
   }
 
 
+  //LED Strip - Turn Off//
   //== PS4 Dpad LEFT button = 0x08 ==//
-  if (ctl->buttons() == 0x08) {
+  if (ctl->dpad() == 0x08) {
     // code for when dpad left button is pushed
     digitalWrite(LED_strip, LOW);  
-      Serial.println("Fita de LED apagado!"); 
+    Serial.println("Fita de LED apagado!"); 
   }
 
 
   //Drawer 2 - Closing//
   //== PS4 Dpad RIGHT button = 0x04 ==//
-  if (ctl->buttons() == 0x04) {
+  if (ctl->dpad() == 0x04) {
     // code for when dpad right button is pushed
     Serial.println("Gaveta 2 fechando....");
+    analogWrite(D2_Backward, 0);
     analogWrite(D2_Forward, 0);
-    analogWrite(D2_Backward, speed);
 
-    //Front Sensor of D1: E21 (0,1,0)
+    //Back Sensor of D2: E21 (0,1,0)
     digitalWrite(S2, LOW);
     digitalWrite(S1, HIGH);
     digitalWrite(S0, LOW);
 
-    while(!digitalRead(PB)){}
+    if (digitalRead(PB))
+      Serial.println("Gaveta 2 JÁ está fechada!");
 
-    if (digitalRead(PB)){
-      analogWrite(D1_Backward, 0);
-      Serial.println("Gaveta 2 fechada!");
+    if ((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+      analogWrite(D2_Backward, speed);
+      while((!digitalRead(PB)) && (ctl->buttons() != 0x0080)){
+        if (digitalRead(PB)){
+          analogWrite(D2_Backward, 0);
+          Serial.println("Gaveta 2 fechada!");
+        }
+      }
+      if (digitalRead(PB)){
+          analogWrite(D2_Backward, 0);
+          Serial.println("Gaveta 2 fechada!");
+      }
     }
   }
 
-
-  //LED Strip - turn OFF//
+  /*
   //== PS4 R1 trigger button = 0x0020 ==//
   if (ctl->buttons() == 0x0020) {
     // code for when R1 button is pushed
-    digitalWrite(LED_strip, LOW);  
-    Serial.println("Fita de LED apagada!");
-  }
+  }*/
 
-  /*
   //== PS4 R2 trigger button = 0x0080 ==//
   if (ctl->buttons() == 0x0080) {
     // code for when R2 button is pushed
+    digitalWrite(LED_state, LOW);
+    digitalWrite(LED_strip, LOW);
+    digitalWrite(S0, LOW);
+    digitalWrite(S1, LOW);
+    digitalWrite(S2, LOW);
+    analogWrite(D1_Forward, 0);
+    analogWrite(D1_Backward, 0);
+    analogWrite(D2_Forward, 0);
+    analogWrite(D2_Backward, 0);
+    analogWrite(D3_Forward, 0);
+    analogWrite(D3_Backward, 0);
+    analogWrite(Left_Forward, 0);
+    analogWrite(Left_Backward, 0);
+    analogWrite(Right_Forward, 0);
+    analogWrite(Right_Backward, 0);
+    Serial.println("");
+    Serial.println("Periféricos Zerados!");
+    Serial.println("");
   }
+
+  /*
   if (ctl->buttons() != 0x0080) {
     // code for when R2 button is released
   }
@@ -282,6 +356,8 @@ void processGamepad(ControllerPtr ctl) {
   if (ctl->buttons() == 0x0010) {
     // code for when L1 button is pushed
   }
+
+  
   if (ctl->buttons() != 0x0010) {
     // code for when L1 button is released
   }
@@ -293,8 +369,6 @@ void processGamepad(ControllerPtr ctl) {
   if (ctl->buttons() != 0x0040) {
     // code for when L2 button is released
   }
-
-
 
   //== LEFT JOYSTICK - UP ==//
   if (ctl->axisY() <= -25) {
@@ -330,8 +404,8 @@ void processGamepad(ControllerPtr ctl) {
   if (ctl->axisRY()) {
   // code for when right joystick moves along y-axis
   }
+*/
 
-  */
   //dumpGamepad(ctl);
 }
 
@@ -347,7 +421,6 @@ void processControllers() {
     }
   }
 }
-
 
 
 // Arduino setup function. Runs in CPU 1
